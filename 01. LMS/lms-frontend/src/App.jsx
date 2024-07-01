@@ -14,7 +14,6 @@ import CreateCourse from './Pages/Course/CreateCourse';
 import RequireAuth from './Components/Auth/RequireAuth';
 import Profile from './Pages/User/Profile';
 import EditProfile from './Pages/User/EditProfile';
-import Checkout from './Pages/Payments/Checkout';
 import Subscribe from './Pages/Payments/Subscribe';
 import CheckoutSuccess from './Pages/Payments/CheckoutSuccess';
 import CheckoutFailure from './Pages/Payments/CheckoutFailure';
@@ -22,7 +21,6 @@ import DisplayLecture from './Pages/Dashboard/DisplayLecture';
 import AddLecture from './Pages/Dashboard/Addlecture';
 import UpdateCourse from './Pages/Course/UpdateCourse';
 import CodeEditor from './CodeOnline/components/CodeEditor'
-import { Box } from '@chakra-ui/react';
 import SubmitReview from './Pages/Revievs/SubmitReview';
 import AllReviews from './Pages/Revievs/AllReviews';
 

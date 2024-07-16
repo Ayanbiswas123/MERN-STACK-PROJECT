@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import HomeLayout from '../Layouts/HomeLayout';
 import { login } from '../Redux/Slices/AuthSlice';
+import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
 
 function Login() {
 
@@ -83,6 +84,11 @@ function Login() {
                             value={loginData.password}
                         />
                     </div>
+                    <Link to="/user/forgot-password">
+                        <p className=" hover:link cursor-pointer text-red-600 flex items-center justify-start w-full gap-2">
+                        forgot password<AiOutlineArrowRight /> 
+                        </p>
+                    </Link>
 
                     <button type="submit" className='mt-2 bg-yellow-600 hover:bg-yellow-500 transition-all ease-in-out duration-300 rounded-sm py-2 font-semibold text-lg cursor-pointer'>
                         Login

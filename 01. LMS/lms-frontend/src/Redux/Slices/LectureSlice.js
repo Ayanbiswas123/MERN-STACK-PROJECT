@@ -57,6 +57,50 @@ export const deleteCourseLecture = createAsyncThunk("course/lecture/delete", asy
 })
 
 
+export const addComment = createAsyncThunk('comments/addComment',async (data) => {
+
+      const { courseId, lectureId, user, comment } = data;
+  
+      try {
+        const response = axiosInstance.post(
+          `/courses/course/${courseId}/lectures/${lectureId}/comments`,
+          { user, comment }
+        );
+        toast.promise(response,{
+            loading:"Mssage sending.....",
+            success:"Mssage send succesfully",
+            error:"Failed to Send the Message"
+        })
+        window.location.reload();
+        return (await response.data);
+        
+      } catch (error) {
+        throw new Error(`Error adding comment: ${error.message}`);
+      }
+    }
+);
+
+export const addReply = createAsyncThunk('comments/addReply',async (data) => {
+    
+    const { courseId, lectureId, commentId, user, comment } = data;
+
+    try {
+      const response = await axiosInstance.post(
+        `/courses/course/${courseId}/lectures/${lectureId}/reply/${commentId}`,
+        { user, comment }
+      );
+
+      return response.data;
+    } catch (error) {
+      throw new Error(`Error adding comment: ${error.message}`);
+    }
+  }
+);
+
+
+
+
+
 const lectureSlice = createSlice({
     name:"lecture",
     initialState,
@@ -73,6 +117,8 @@ const lectureSlice = createSlice({
     
     }
 })
+
+
 
 
 export default lectureSlice.reducer;

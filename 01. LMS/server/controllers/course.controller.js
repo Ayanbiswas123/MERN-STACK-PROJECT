@@ -117,37 +117,6 @@ const createCourse = async (req, res,next) => {
 
 }
 
-
-// const updateCourse = async (req, res,next) => {
-//     try {
-//         const {id} = req.params;
-//         const course = await Course.findByIdAndUpdate(
-//             id,
-//             {
-//                 $set : req.body
-//             },
-//             {
-//                 runValidators:true
-//             }
-//         )
-
-//         if(!course){
-//             return next(new ApiError(400,'course with given id not exist'))
-//         }
-
-//         res.status(200).json({
-//             success:true,
-//             message:'Course Updated succesfully',
-//             course
-//         })
-
-//     } catch (error) {
-//         return next(new ApiError(400,error.message))
-//     }
-
-    
-// }
-
 const updateCourse = async (req, res,next) => {
     const { title, description, category , createdBy} = req.body
 
@@ -227,57 +196,6 @@ const removeCourse = async (req, res,next) => {
     }
 }
 
-
-// const addLectureToCourseById = async(req,res,next) =>{
-//     const {title,description} = req.body;
-//     const {id} = req.params;
-
-//     if(!title || !description){
-//         return next(new ApiError(400,'All fields are require'))
-//     }
-
-//     const course = await Course.findById(id);
-
-//     if(!course){
-//         return next(new ApiError(400,'Course with given Id Not Exist'))
-//     }
-
-//     const lectureData = {
-//         title,
-//         description
-//     }
-
-//     if (req.file) {
-//         const thumbnailLocalPath = req.file?.path
-//         //console.log(thumbnailLocalPath);
-
-//         if (!thumbnailLocalPath) {
-//             return next(new ApiError(400, 'thumbnailLocalPath require'))
-//         }
-
-//         const uploadedThumbnail = await uploadOnCloudinary(thumbnailLocalPath)
-
-//         //console.log(uploadedThumbnail);
-
-//         if (!uploadedThumbnail) {
-//             return next(new ApiError(400, 'Error in upload thumbnail, try again'))
-//         }
-
-//         console.log(uploadedThumbnail);
-//         lectureData.lecture.secure_url = uploadedThumbnail.url || "";
-//     }
-
-//     course.lectures.push(lectureData);
-
-//     course.numberOfLectures = course.lectures.length;
-
-//     await course.save()
-
-//     res.status(200).json({
-//         success:true,
-//         message:'Lecture Succesfully Added to Course',
-//     })
-// }
 
 const addLectureToCourseById = async (req, res, next) => {
     const { title, description } = req.body;
@@ -372,8 +290,105 @@ const deleteLectureFromCourseById = async (req, res, next) => {
     }
 };
 
+const addReview = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { user, rating, comment } = req.body;
 
+        const course = await Course.findById(id);
 
+        if (!course) {
+            return next(new ApiError(400, "Invalid course ID"));
+        }
+
+        const newReview = {
+            user,
+            rating,
+            comment,
+            createdAt: new Date()
+        };
+
+        course.reviews.push(newReview);
+        await course.save();
+
+        res.status(201).json({
+            success: true,
+            message: "Review added successfully",
+            reviews: course.reviews
+        });
+    } catch (error) {
+        next(new ApiError(500, error.message));
+    }
+};
+
+const addComment = async(req,res,next) => {
+    const { courseId, lectureId } = req.params;
+    const { user, comment } = req.body;
+    console.log(user,comment);
+    console.log(courseId,lectureId);
+
+    try {
+        const course = await Course.findById(courseId);
+        if (!course) {
+            return next(new ApiError(400,'Course not found'))
+        }
+
+        const lecture = course.lectures.id(lectureId);
+        if (!lecture) {
+            return next(new ApiError(400,'Lecture not found'));
+        }
+
+        // Add the comment to the lecture
+        lecture.comments.push({ user, comment });
+        course.save();
+
+        res.status(201).json({ 
+            message: 'Comment added successfully', 
+            course 
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            error: 'Internal server error' 
+        });
+    }
+}
+
+const replyOnComment = async(req,res,next) => {
+    const { courseId, lectureId, commentId } = req.params;
+    const { user, comment } = req.body;
+    console.log(user,comment);
+    console.log(courseId,lectureId,commentId);
+
+    try {
+        const course = await Course.findById(courseId);
+        if (!course) {
+            return next(new ApiError(400,'Course not found'))
+        }
+
+        const lecture = course.lectures.id(lectureId);
+        if (!lecture) {
+            return next(new ApiError(400,'Lecture not found'));
+        }
+
+        const commentToUpdate = lecture.comments.id(commentId);
+        if (!commentToUpdate) {
+            return next(new ApiError(400,"Comment not found"))
+        }
+
+        // Add the reply to the comment
+        commentToUpdate.replies.push({ user, comment });
+        course.save();
+
+        res.status(201).json({ 
+            message: 'Reply added successfully', 
+            course 
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            error: 'Internal server error' 
+        });
+    }
+}
 
 
 
@@ -386,5 +401,8 @@ export {
     updateCourse,
     removeCourse,
     addLectureToCourseById,
-    deleteLectureFromCourseById
+    deleteLectureFromCourseById,
+    addReview,
+    addComment,
+    replyOnComment
 }

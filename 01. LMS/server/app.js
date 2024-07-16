@@ -6,8 +6,8 @@ import userRoute from './route/user.routes.js'
 import courseRoutes from './route/course.routes.js'
 import paymentRoutes from './route/payment.routes.js'
 import errorMiddleware from "./middleware/error.middleware.js";
-import { contactUs } from "./controllers/contact.controller.js";
-import { isLoggedIn } from "./middleware/auth.middleware.js";
+import { contactUs, getAllcontact } from "./controllers/contact.controller.js";
+import { authorizedRoles, isLoggedIn } from "./middleware/auth.middleware.js";
 import { getAllReview, userReview } from "./controllers/review.controller.js";
 
 const app = express();
@@ -35,6 +35,7 @@ app.post('/api/v1/contact',isLoggedIn,contactUs)
 
 app.post('/api/v1/addreview',isLoggedIn,userReview)
 
+app.get('/api/v1/allcontacts',getAllcontact)
 app.get('/api/v1/allreview',getAllReview)
 
 

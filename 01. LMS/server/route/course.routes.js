@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { addLectureToCourseById, createCourse, deleteLectureFromCourseById, getAllCourses, getLectureByCourseId, removeCourse, updateCourse } from "../controllers/course.controller.js";
+import { addComment, addLectureToCourseById, addReview, createCourse, deleteLectureFromCourseById, getAllCourses, getLectureByCourseId, removeCourse, replyOnComment, updateCourse } from "../controllers/course.controller.js";
 import { authorizedRoles, authorizedSubscriber, isLoggedIn } from "../middleware/auth.middleware.js";
 import { upload } from "../middleware/multer.middleware.js";
 
@@ -39,6 +39,16 @@ router.route('/:id')
     upload.single('lectureThumbnail'),
     addLectureToCourseById
 )
+
+router.route('/:id/review')
+.post(isLoggedIn ,authorizedSubscriber,addReview)
+//add comment on perticuler lecture
+router.route('/course/:courseId/lectures/:lectureId/comments')
+.post(isLoggedIn ,authorizedSubscriber,addComment)
+
+//add reply on perticular comment
+router.route('/course/:courseId/lectures/:lectureId/reply/:commentId')
+.post(isLoggedIn ,authorizedSubscriber,replyOnComment)
 
 
 

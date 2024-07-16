@@ -11,6 +11,8 @@ import { getUserData, updateProfile } from "../../Redux/Slices/AuthSlice";
 function EditProfile() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    
+    
     const [data, setData] = useState({
         previewImage: "",
         fullName: "",

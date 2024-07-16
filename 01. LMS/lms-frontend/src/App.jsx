@@ -23,6 +23,11 @@ import UpdateCourse from './Pages/Course/UpdateCourse';
 import CodeEditor from './CodeOnline/components/CodeEditor'
 import SubmitReview from './Pages/Revievs/SubmitReview';
 import AllReviews from './Pages/Revievs/AllReviews';
+import ChangePassword from './Pages/User/ChangePassword';
+import ForgotPassword from './Pages/User/ForgotPassword';
+import AdminDashboard from './Pages/Dashboard/AdminDashboard';
+import AllContact from './Pages/Revievs/AllContact';
+import AllPayments from './Pages/Payments/AllPayments';
 
 
 function App() {
@@ -46,15 +51,20 @@ function App() {
 
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/user/forgot-password" element={<ForgotPassword/>} />
 
         <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>
           <Route path='/course/create' element={<CreateCourse />} />
           <Route path='/course/update' element={<UpdateCourse />} />
+          <Route path='admin/dashboard' element={<AdminDashboard/>} />
+          <Route path='/growth' element={<AllPayments/>} />
+          <Route path='/contact-request' element={<AllContact/>} />
         </Route>
 
         <Route element={<RequireAuth allowedRoles={["ADMIN", "USER"]} />}>
           <Route path='/user/profile' element={<Profile />} />
           <Route path='/user/editprofile' element={<EditProfile />} />
+          <Route path='/user/changepassword' element={<ChangePassword/>}/>
           <Route path='/checkout' element={<Subscribe />} />
           <Route path='/checkout/success' element={<CheckoutSuccess />} />
           <Route path='/checkout/fail' element={<CheckoutFailure />} />

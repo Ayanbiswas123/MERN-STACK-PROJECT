@@ -86,6 +86,46 @@ export const updateProfile = createAsyncThunk("/user/update/profile", async (for
     }
 });
 
+export const changePassword = createAsyncThunk("/user/update/password", async (data) => {
+    const {oldPassword, newPassword} = data
+    //console.log(data);
+    //console.log(oldPassword, newPassword);
+    try {
+        const res = axiosInstance.post("user/changepassword", {oldPassword,newPassword});
+        toast.promise(res, {
+            loading: "Wait! Password update in progress...",
+            success: (data) => {
+                return data?.data?.message;
+            },
+            error: "Failed to update profile"
+        });
+        return (await res).data;
+    } catch(error) {
+        toast.error(error?.response?.data?.message);
+    }
+});
+
+export const forgotPassword = createAsyncThunk("/user/update/forgot-password", async (data) => {
+    const {email, newPassword} = data
+    console.log(data);
+    console.log(email, newPassword);
+    try {
+        const res = axiosInstance.post("user/forgot-password", {email,newPassword});
+        toast.promise(res, {
+            loading: "Wait! Password update in progress...",
+            success: (data) => {
+                return data?.data?.message;
+            },
+            error: "Failed to update profile"
+        });
+        return (await res).data;
+    } catch(error) {
+        toast.error(error?.response?.data?.message);
+    }
+});
+
+
+
 export const getUserData = createAsyncThunk("/user/details", async () => {
     try {
         const res = axiosInstance.get("user/me");

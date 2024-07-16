@@ -25,7 +25,7 @@ router.route('/unsubscribe')
     );
 
 router.route('/')
-    .post(
+    .get(
         isLoggedIn,
         authorizedRoles('ADMIN'),
         allPayments)

@@ -28,7 +28,17 @@ function HomeLayout({ children }) {
         element[0].checked = false;
 
         const drawerSide = document.getElementsByClassName("drawer-side");
-        drawerSide[0].style.width = '0';
+        if (drawerSide[0]) {
+            drawerSide[0].classList.remove("w-48", "sm:w-0");
+            drawerSide[0].classList.add("w-0");
+        }
+    }
+
+    // Function to hide drawer when the mouse moves away from the menu area
+    function handleMouseLeave() {
+        hideDrawer()
+        // const drawerSide = document.getElementsByClassName("drawer-side");
+        // drawerSide[0].style.width = '0';
     }
 
     async function handleLogout(e) {
@@ -40,7 +50,7 @@ function HomeLayout({ children }) {
     }
     return (
         <div className="min-h-[90vh] ">
-            <div className="drawer absolute left-0 z-50 w-fit">
+            <div className="drawer absolute left-0 z-50 w-fit" onMouseLeave={handleMouseLeave}>
                 <input className="drawer-toggle" id="my-drawer" type="checkbox" />
                 <div className="drawer-content">
                     <label htmlFor="my-drawer" className="cursor-pointer relative">
@@ -51,7 +61,7 @@ function HomeLayout({ children }) {
                         />  
                     </label>
                 </div>
-                <div className="drawer-side w-0">
+                <div className="drawer-side w-0 ">
                     <label htmlFor="my-drawer" className="drawer-overlay">
                     </label>
                     <ul className="menu p-4 w-48 h-[100%] sm:w-80 bg-base-200 text-base-content relative">

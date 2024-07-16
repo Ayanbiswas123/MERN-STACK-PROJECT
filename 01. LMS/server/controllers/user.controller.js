@@ -150,42 +150,42 @@ const getProfile = async(req,res,next) =>{
 }
 
 //not work right now
-const forgotPassword = async(req,res) =>{
+// const forgotPassword = async(req,res) =>{
 
-    const {email} = req.body;
+//     const {email} = req.body;
 
-    if(!email){
-        return next(new ApiError(400,'Email is require'))
-    }
+//     if(!email){
+//         return next(new ApiError(400,'Email is require'))
+//     }
 
-    const user = await User.findOne({email});
+//     const user = await User.findOne({email});
 
-    if(!user){
-        return next(new ApiError(400,'Email not register'))
-    }
+//     if(!user){
+//         return next(new ApiError(400,'Email not register'))
+//     }
 
-    const resetToken = await user.generatePasswordResetToken();
+//     const resetToken = await user.generatePasswordResetToken();
 
-    await user.save();
+//     await user.save();
 
-    const resetPasswordURL = `${process.env.FRONTEND_URL}`
+//     const resetPasswordURL = `${process.env.FRONTEND_URL}`
 
-    try {
-        await sendEmail(email, subject, message);
-        res.status(200).json({
-            success:true,
-            message:`Reset password token has been sent to ${email}`
-        })
+//     try {
+//         await sendEmail(email, subject, message);
+//         res.status(200).json({
+//             success:true,
+//             message:`Reset password token has been sent to ${email}`
+//         })
 
-    } catch (error) {
+//     } catch (error) {
 
-        user.forgotPasswordExpiry = undefined;
-        user.forgotPasswordToken = undefined;
+//         user.forgotPasswordExpiry = undefined;
+//         user.forgotPasswordToken = undefined;
 
-        await user.save()
-        return next(new ApiError(400,e.message))
-    }
-}
+//         await user.save()
+//         return next(new ApiError(400,e.message))
+//     }
+// }
 
 //not work right now
 const resetPassword = async(req,res) =>{
@@ -225,6 +225,29 @@ const changePassword = async(req,res) =>{
     })
 }
 
+const forgotPassword = async(req,res) =>{
+
+    const {email,newPassword} = req.body;
+
+    if(!email){
+        return next(new ApiError(400,'Email is require'))
+    }
+
+    const user = await User.findOne({email});
+
+    if(!user){
+        return next(new ApiError(400,'Email not register'))
+    }
+
+    user.password = newPassword;
+    await user.save()
+
+    user.password = undefined;
+    res.status(200).json({
+        success:true,
+        message:"Passwor changed successfully"
+    })
+}
 
 const updateUser = async(req, res, next) => {
     const { fullName } = req.body;

@@ -9,7 +9,7 @@ import lectureSliceReducer from "./Slices/LectureSlice";
         auth:AuthSliceReducer,
         course: courseSliceReducer,
         payments: paymentSliceReducer,
-        lecture : lectureSliceReducer
+        lecture : lectureSliceReducer,
     },
     devTools:true
  })

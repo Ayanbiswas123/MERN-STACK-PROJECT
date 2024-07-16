@@ -10,9 +10,9 @@ route.post('/register', upload.single('avatar') ,register)
 route.post('/login',login)
 route.get('/logout',logout)
 route.get('/me', isLoggedIn ,getProfile)
-//route.post('/forgot-password',forgotPassword)
+route.post('/forgot-password',forgotPassword)
 //route.post('/reser-password',resetPassword)
-route.post('/change-password',isLoggedIn,changePassword)
+route.post('/changepassword',isLoggedIn,changePassword)
 route.put('/update',isLoggedIn,upload.single('avatar') ,updateUser)
 
 
